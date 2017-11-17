@@ -1,0 +1,6 @@
+autoload
+colors
+plugged
+
+.netrwhist
+rplugin.vim
