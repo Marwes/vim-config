@@ -85,14 +85,6 @@ let g:deopleteenable_at_startup = 1
 colorscheme molokai
 let g:molokai_original = 1
 
-let g:LanguageClient_serverCommands = {
-    \ 'gluon': ['gluon_language_server'],
-    \ }
-
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-
 set hidden
 
 filetype plugin indent on     " required!
