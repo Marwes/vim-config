@@ -82,6 +82,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'tomasr/molokai'
 
+Plug 'christoomey/vim-tmux-navigator'
+
 call plug#end()
 
 let g:deopleteenable_at_startup = 1
@@ -140,3 +142,4 @@ if executable('rg')
   command -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
   nnoremap \ :Rg<SPACE>
 endif
+
