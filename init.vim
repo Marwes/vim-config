@@ -124,6 +124,8 @@ nmap <silent> <c-j> :wincmd j<CR>
 nmap <silent> <c-h> :wincmd h<CR>
 nmap <silent> <c-l> :wincmd l<CR>
 
+imap jj <Esc>
+
 let g:ale_linters = {'rust': ['rls']}
 
 " Use rg instead of grep
