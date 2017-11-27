@@ -86,7 +86,7 @@ Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
-let g:deopleteenable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
 
 colorscheme molokai
 let g:molokai_original = 1
