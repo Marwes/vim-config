@@ -84,9 +84,18 @@ Plug 'tomasr/molokai'
 
 Plug 'christoomey/vim-tmux-navigator'
 
+Plug 'vim-scripts/gitignore'
+
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
+
+let g:NERDTreeRespectWildIgnore = 1
+
+let g:vim_markdown_folding_disabled = 1
 
 colorscheme molokai
 let g:molokai_original = 1
