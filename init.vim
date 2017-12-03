@@ -71,7 +71,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'dag/vim2hs'
 Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
-Plug 'Marwes/vim-gluon'
+Plug 'gluon-lang/vim-gluon'
 Plug 'rust-lang/rust.vim'
 "Plugin 'phildawes/racer'
 "
