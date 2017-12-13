@@ -82,13 +82,17 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'tomasr/molokai'
 
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'edkolev/tmuxline.vim'
-
 "Plug 'octref/RootIgnore'
 
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+
+if has('unix')
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'edkolev/tmuxline.vim'
+
+    Plug 'dag/vim-fish' 
+endif
 
 call plug#end()
 
