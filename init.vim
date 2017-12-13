@@ -83,8 +83,9 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'tomasr/molokai'
 
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'edkolev/tmuxline.vim'
 
-Plug 'vim-scripts/gitignore'
+"Plug 'octref/RootIgnore'
 
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
@@ -93,9 +94,16 @@ call plug#end()
 
 let g:deoplete#enable_at_startup = 1
 
-let g:NERDTreeRespectWildIgnore = 1
+" let g:NERDTreeRespectWildIgnore = 1
 
 let g:vim_markdown_folding_disabled = 1
+
+if has('unix')
+    autocmd BufEnter * call system("tmux rename-window " . expand("%:t"))
+    autocmd VimLeave * call system("tmux rename-window bash")
+    autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
+    set title
+endif
 
 colorscheme molokai
 let g:molokai_original = 1
@@ -144,7 +152,7 @@ if executable('rg')
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   " let g:ctrlp_user_command = 'rg %s -l --color never -g ""'
-  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+  let g:ctrlp_user_command = ['.git', 'cd %s ; git ls-files . -co --exclude-standard', 'find %s -type f']
 
   " rg is fast enough that CtrlP doesn't need to cache
   " let g:ctrlp_use_caching = 0
