@@ -40,6 +40,8 @@ endif
 set directory+=,~/tmp,$TMP
 
 autocmd FileType make setlocal noexpandtab
+autocmd BufRead COMMIT_EDITMSG setlocal spell
+autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set spell
 
 set nocompatible               " be iMproved
 filetype off                   " required!
