@@ -74,7 +74,6 @@ Plug 'dag/vim2hs'
 Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 Plug 'gluon-lang/vim-gluon'
-Plug 'rust-lang/rust.vim'
 "Plugin 'phildawes/racer'
 "
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
