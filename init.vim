@@ -24,11 +24,7 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 set wildignore+=*/target/*,*.bk  " Rust
 
 let g:rustfmt_autosave = 1
-if filereadable(expand('~/.config/nvim/init.vim'))
-    let g:rustfmt_command = 'rustup run nightly-2017-09-17 rustfmt'
-else
-    let g:rustfmt_command = 'rustup run nightly rustfmt'
-endif
+" let g:rustfmt_command = 'rustup run nightly rustfmt'
 
 syntax on
 if has("win32")
@@ -68,6 +64,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
 Plug 'kien/ctrlp.vim'
 
+Plug 'leafgarland/typescript-vim'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
 Plug 'dag/vim2hs'
@@ -92,6 +89,10 @@ Plug 'plasticboy/vim-markdown'
 if has('unix')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'edkolev/tmuxline.vim'
+    Plug 'benmills/vimux'
+    map <Leader>vl :VimuxRunLastCommand<CR>
+    map <Leader>vr :VimuxRunCommand
+    map <Leader>vs :VimuxInterruptRunner<CR>
 
     Plug 'dag/vim-fish' 
 endif
@@ -130,7 +131,8 @@ endif
 
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
     \ 'gluon': ['gluon_language-server.exe'],
     \ }
 
