@@ -73,7 +73,7 @@ Plug 'prabirshrestha/async.vim'
 Plug 'gluon-lang/vim-gluon'
 "Plugin 'phildawes/racer'
 "
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 " Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
