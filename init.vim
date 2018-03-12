@@ -63,6 +63,7 @@ Plug 'git://git.wincent.com/command-t.git'
 Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
 Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-unimpaired'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'cespare/vim-toml'
