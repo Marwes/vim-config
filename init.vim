@@ -21,7 +21,7 @@ au BufRead,BufNewFile *.rs setfiletype rust
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-set wildignore+=*/target/*,*.bk  " Rust
+set wildignore+=*/target/*,*.bk,*.orig  " Rust
 
 let g:rustfmt_autosave = 1
 " let g:rustfmt_command = 'rustup run nightly rustfmt'
@@ -101,7 +101,7 @@ call plug#end()
 
 let g:deoplete#enable_at_startup = 1
 
-" let g:NERDTreeRespectWildIgnore = 1
+let g:NERDTreeRespectWildIgnore = 1
 
 let g:vim_markdown_folding_disabled = 1
 
