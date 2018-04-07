@@ -22,6 +22,8 @@ au BufRead,BufNewFile *.rs setfiletype rust
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 set wildignore+=*/target/*,*.bk,*.orig  " Rust
+set wildignore+=*/node_modules/*  " Node
+set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
 " let g:rustfmt_command = 'rustup run nightly rustfmt'
@@ -72,9 +74,15 @@ Plug 'dag/vim2hs'
 Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 Plug 'gluon-lang/vim-gluon'
+Plug 'mattn/emmet-vim'
+Plug 'ekalinin/Dockerfile.vim'
 "Plugin 'phildawes/racer'
 "
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+if has("win32")
+    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'powershell -executionpolicy bypass -File install.ps1' }
+else
+    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+endif
 " Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -154,7 +162,7 @@ imap jj <Esc>
 let g:ale_linters = {'rust': ['rls']}
 
 " Use rg instead of grep
-if executable('rg')
+if executable('rg') && !has("win32")
   " Use ag over grep
   set grepprg=rg\ --vimgrep
 
