@@ -84,7 +84,6 @@ else
     Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 endif
 " Plug 'vim-syntastic/syntastic'
-Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'tomasr/molokai'
@@ -159,7 +158,6 @@ nmap <silent> <c-l> :wincmd l<CR>
 
 imap jj <Esc>
 
-let g:ale_linters = {'rust': ['rls']}
 
 " Use rg instead of grep
 if executable('rg') && !has("win32")
