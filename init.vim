@@ -70,7 +70,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'leafgarland/typescript-vim'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
-Plug 'dag/vim2hs'
+Plug 'neovimhaskell/haskell-vim'
 Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 Plug 'gluon-lang/vim-gluon'
@@ -140,7 +140,7 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'gluon': ['gluon_language-server.exe'],
+    \ 'gluon': ['gluon_language-server'],
     \ }
 
 " Automatically start language servers.
