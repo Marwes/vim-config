@@ -26,7 +26,7 @@ set wildignore+=*/node_modules/*  " Node
 set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
-" let g:rustfmt_command = 'rustup run nightly rustfmt'
+let g:rustfmt_command = 'rustfmt --edition=2018'
 
 syntax on
 if has("win32")
@@ -40,6 +40,15 @@ set directory+=,~/tmp,$TMP
 autocmd FileType make setlocal noexpandtab
 autocmd BufRead COMMIT_EDITMSG setlocal spell
 autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set spell
+
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 set nocompatible               " be iMproved
 filetype off                   " required!
@@ -101,7 +110,7 @@ if has('unix')
     map <Leader>vr :VimuxRunCommand
     map <Leader>vs :VimuxInterruptRunner<CR>
 
-    Plug 'dag/vim-fish' 
+    Plug 'dag/vim-fish'
 endif
 
 call plug#end()
@@ -115,7 +124,7 @@ let g:vim_markdown_folding_disabled = 1
 if has('unix')
     autocmd BufEnter * call system("tmux rename-window " . expand("%:t"))
     autocmd VimLeave * call system("tmux rename-window bash")
-    autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
+    autocmd BufEnter * let &titlestring = ' ' . expand("%:t")
     set title
 endif
 
