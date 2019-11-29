@@ -26,7 +26,7 @@ set wildignore+=*/node_modules/*  " Node
 set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
-let g:rustfmt_command = 'rustfmt --edition=2018'
+let g:rustfmt_command = 'rustup run stable rustfmt --edition 2018'
 
 syntax on
 if has("win32")
@@ -146,7 +146,7 @@ if has('win32')
 endif
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'rust': ['ra_lsp_server'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'gluon': ['gluon_language-server'],
