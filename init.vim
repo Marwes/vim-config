@@ -77,6 +77,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
 Plug 'neovimhaskell/haskell-vim'
