@@ -73,7 +73,9 @@ Plug 'git://git.wincent.com/command-t.git'
 " ...
 Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
-Plug 'kien/ctrlp.vim'
+"Plug 'kien/ctrlp.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'leafgarland/typescript-vim'
@@ -168,6 +170,17 @@ nmap <silent> <c-l> :wincmd l<CR>
 
 imap jj <Esc>
 
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+nmap <c-p> :GitFiles<CR>
 
 " Use rg instead of grep
 if executable('rg') && !has("win32")
