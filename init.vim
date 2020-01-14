@@ -11,6 +11,8 @@ set softtabstop=4
 set number
 set encoding=utf-8
 
+set shell=/bin/bash
+
 " Disable arrow keys so hjkl are used instead
 map <Up> ""
 map <Down> ""
@@ -26,7 +28,7 @@ set wildignore+=*/node_modules/*  " Node
 set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
-let g:rustfmt_command = 'rustup run stable rustfmt --edition 2018'
+let g:rustfmt_options = '--edition 2018'
 
 syntax on
 if has("win32")
@@ -157,6 +159,7 @@ let g:LanguageClient_serverCommands = {
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
+let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
