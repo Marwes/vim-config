@@ -32,7 +32,7 @@ let g:rustfmt_options = '--edition 2018'
 
 syntax on
 if has("win32")
-    set guifont=consolas
+    " set guifont=consolas
 else
     set guifont=Droid\ Sans\ Mono
 endif
@@ -99,6 +99,11 @@ else
 endif
 " Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
+
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 
 Plug 'tomasr/molokai'
 
@@ -160,6 +165,10 @@ let g:LanguageClient_serverCommands = {
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
+
+let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
