@@ -28,7 +28,6 @@ set wildignore+=*/node_modules/*  " Node
 set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
-let g:rustfmt_options = '--edition 2018'
 
 syntax on
 if has("win32")
