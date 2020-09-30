@@ -3,7 +3,7 @@ filetype indent on
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 set backspace=2
-set autoindent
+set smartindent
 set expandtab
 set shiftwidth=4
 set tabstop=4
@@ -40,7 +40,7 @@ set directory+=,~/tmp,$TMP
 
 autocmd FileType make setlocal noexpandtab
 autocmd BufRead COMMIT_EDITMSG setlocal spell
-autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set spell
+autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown,*rs set spell
 
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -83,6 +83,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
+Plug 'hashivim/vim-terraform'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
@@ -110,6 +111,13 @@ Plug 'tomasr/molokai'
 
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+
+
+Plug 'Shougo/echodoc.vim'
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
+set signcolumn=yes
 
 if has('unix')
     Plug 'christoomey/vim-tmux-navigator'
@@ -155,7 +163,7 @@ if has('win32')
 endif
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['ra_lsp_server'],
+    \ 'rust': [expand('~/.config/Code/User/globalStorage/matklad.rust-analyzer/rust-analyzer-linux')],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'gluon': ['gluon_language-server'],
@@ -164,6 +172,7 @@ let g:LanguageClient_serverCommands = {
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
+let g:LanguageClient_settingsPath = expand('~/.config/nvim/language_client_settings.json')
 
 let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 
@@ -172,6 +181,25 @@ nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nmap <silent><F8> <Plug>(lcn-references)
+
+function SetLSPShortcuts()
+  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
+  nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
+  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
+  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+endfunction()
+
+augroup LSP
+  autocmd!
+  autocmd FileType rust call SetLSPShortcuts()
+augroup END
 
 " Use ctrl-[hjkl] to select the active split!
 nmap <silent> <c-k> :wincmd k<CR>
@@ -182,7 +210,7 @@ nmap <silent> <c-l> :wincmd l<CR>
 imap jj <Esc>
 
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s; true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
