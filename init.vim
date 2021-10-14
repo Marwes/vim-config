@@ -93,11 +93,6 @@ Plug 'mattn/emmet-vim'
 Plug 'ekalinin/Dockerfile.vim'
 "Plugin 'phildawes/racer'
 "
-if has("win32")
-    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'powershell -executionpolicy bypass -File install.ps1' }
-else
-    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-endif
 " Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
@@ -119,6 +114,8 @@ set cmdheight=2
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'signature'
 set signcolumn=yes
+
+Plug 'neovim/nvim-lspconfig'
 
 if has('unix')
     Plug 'christoomey/vim-tmux-navigator'
@@ -163,55 +160,7 @@ if has('win32')
     vnoremap <silent> d d:call ClipboardYank()<cr>
 endif
 
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rust-analyzer'],
-    \ 'go': [expand('~/go/bin/go-langserver')],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'gluon': ['gluon_language-server'],
-    \ }
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
-let g:LanguageClient_settingsPath = expand('~/.config/nvim/language_client_settings.json')
-
-function! MaybeFormat() abort
-    if !has_key(g:LanguageClient_serverCommands, &filetype)
-        return
-    endif
-
-    call LanguageClient#textDocument_formatting_sync()
-endfunction
-
-autocmd BufWritePre *.go call MaybeFormat()
-
-" let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nmap <silent><F8> <Plug>(lcn-references)
-
-function SetLSPShortcuts()
-  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
-  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
-  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
-  nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
-  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
-  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
-endfunction()
-
-augroup LSP
-  autocmd!
-  autocmd FileType rust call SetLSPShortcuts()
-augroup END
+autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync()
 
 " Use ctrl-[hjkl] to select the active split!
 nmap <silent> <c-k> :wincmd k<CR>
@@ -250,3 +199,51 @@ if executable('rg') && !has("win32")
   " nnoremap \ :Rg<SPACE>
 endif
 
+lua << EOF
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'gopls', 'rust_analyzer' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
