@@ -11,6 +11,8 @@ set softtabstop=4
 set number
 set encoding=utf-8
 
+autocmd FileType go setlocal expandtab&
+
 set shell=/bin/bash
 
 " Disable arrow keys so hjkl are used instead
@@ -23,8 +25,7 @@ au BufRead,BufNewFile *.rs setfiletype rust
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-set wildignore+=*/target/*,*.bk,*.orig  " Rust
-set wildignore+=*/node_modules/*  " Node
+set wildignore+=*/target/*,*.bk,*.orig  " Rust set wildignore+=*/node_modules/*  " Node
 set wildignore+=*/elm-stuff/*  " Elm
 
 let g:rustfmt_autosave = 1
@@ -163,7 +164,8 @@ if has('win32')
 endif
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': [expand('~/.config/Code/User/globalStorage/matklad.rust-analyzer/rust-analyzer-linux')],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rust-analyzer'],
+    \ 'go': [expand('~/go/bin/go-langserver')],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'gluon': ['gluon_language-server'],
@@ -174,7 +176,17 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/language_client_settings.json')
 
-let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
+function! MaybeFormat() abort
+    if !has_key(g:LanguageClient_serverCommands, &filetype)
+        return
+    endif
+
+    call LanguageClient#textDocument_formatting_sync()
+endfunction
+
+autocmd BufWritePre *.go call MaybeFormat()
+
+" let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
@@ -234,7 +246,7 @@ if executable('rg') && !has("win32")
   " let g:ctrlp_use_caching = 0
 
   " bind \ (backward slash) to grep shortcut
-  command -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
-  nnoremap \ :Rg<SPACE>
+  " command -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
+  " nnoremap \ :Rg<SPACE>
 endif
 
