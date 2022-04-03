@@ -20,7 +20,9 @@ endfunc
 
 autocmd FileType go setlocal expandtab&
 
-set shell=/bin/bash
+if has('unix')
+  set shell=/bin/bash
+endif
 
 " Disable arrow keys so hjkl are used instead
 map <Up> ""
@@ -89,7 +91,7 @@ Plug 'tpope/vim-unimpaired'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
-Plug 'cespare/vim-toml'
+" Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'neovimhaskell/haskell-vim'
