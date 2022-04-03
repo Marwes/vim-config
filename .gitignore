@@ -1,6 +1,9 @@
 autoload
 colors
 plugged
+plugin
+undodir
+pack
 
 .netrwhist
 rplugin.vim
