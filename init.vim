@@ -30,6 +30,8 @@ map <Down> ""
 map <Left> ""
 map <Right> ""
 
+nnoremap <silent> <C-6> <C-^>
+
 au BufRead,BufNewFile *.rs setfiletype rust
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
@@ -78,8 +80,6 @@ endif
 Plug 'tpope/vim-fugitive'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-" non github repos
-Plug 'git://git.wincent.com/command-t.git'
 " git repos on your local machine (ie. when working on your own plugin)
 " ...
 Plug 'scrooloose/nerdtree'
@@ -217,6 +217,7 @@ end
 
 local use = require('packer').use
 require('packer').startup(function()
+  use 'wbthomason/packer.nvim'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
   use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
   use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
@@ -230,7 +231,7 @@ end)
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
 
@@ -333,9 +334,6 @@ local servers = {
     rust_analyzer = {
         cmd = {'rustup', 'run', 'nightly', 'rust-analyzer'}
     },
-    ['flux-lsp'] = {
-        single_file_support = true
-    }
 }
 for lsp, config in pairs(servers) do
     config.on_attach = on_attach
