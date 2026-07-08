@@ -241,15 +241,14 @@ end)
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local lspconfig = require('lspconfig')
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 local servers = { 'clangd', 'rust_analyzer', 'pyright', 'ts_ls' }
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  vim.lsp.config(lsp, {
     -- on_attach = my_custom_on_attach,
     capabilities = capabilities,
-  }
+  })
 end
 
 -- luasnip setup
@@ -298,9 +297,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
-
-local nvim_lsp = require('lspconfig')
 
 -- -- Use an on_attach function to only map the following keys
 -- -- after the language server attaches to the current buffer
@@ -389,6 +385,11 @@ local servers = {
                 cargo = {
                     features = 'all',
                 },
+                inlayHints = {
+                    typeHints = {
+                        enable = false,
+                    },
+                },
             },
         },
     },
@@ -400,7 +401,8 @@ for lsp, config in pairs(servers) do
     config.flags = {
         debounce_text_changes = 150
     }
-    nvim_lsp[lsp].setup(config)
+    vim.lsp.config(lsp, config)
+    vim.lsp.enable(lsp)
 end
 -- vim.lsp.set_log_level('debug')
 EOF
